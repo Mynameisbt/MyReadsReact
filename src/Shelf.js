@@ -13,7 +13,7 @@ class Shelf extends React.Component {
                     {
                         this.props.shelfBooks.map((book) => {
                             return (<li>
-                                <Book book={book} />
+                                <Book book={book}  moveBookFunction={this.props.moveBookFunction}/>
                             </li>)
                         })
                     }

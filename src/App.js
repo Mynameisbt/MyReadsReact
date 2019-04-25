@@ -17,7 +17,7 @@ class BooksApp extends React.Component {
     readBooks: []
   }
 
-  getAllBooks() {
+  getAllBooks =() => {
     BooksAPI.getAll().then( (result) => {
       console.log(result);
       this.setState((prevState) => (
@@ -27,8 +27,24 @@ class BooksApp extends React.Component {
           readBooks: result.filter((book) => book.shelf === "read")
         }
       ));
+    })
+  }
+
+
+
+  updateBookShelf = (book, newShelf) => {
+    this.setState((prevState) => {
+      let newState = {};
+      let oldBookShelf = book.shelf+"Books";
+      let newBookShelf = newShelf+"Books";
+      newState[oldBookShelf] = prevState[oldBookShelf].filter((b) => (b.id !== book.id));
+      book.shelf = newShelf;
+      newState[newBookShelf] = prevState[newBookShelf];
+      newState[newBookShelf].push(book);
+      return newState;
     });
-    
+
+    BooksAPI.update(book, newShelf);
   }
 
   render() {
@@ -63,9 +79,9 @@ class BooksApp extends React.Component {
             <button onClick={() => this.getAllBooks()}>Get ALL</button>
             <div className="list-books-content">
               <div>
-                <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks}/>
-                <Shelf shelfName="Want To Read" shelfBooks={this.state.wantToReadBooks}/>
-                <Shelf shelfName="Read" shelfBooks={this.state.readBooks}/>                  
+                <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks} moveBookFunction={this.updateBookShelf}/>
+                <Shelf shelfName="Want To Read" shelfBooks={this.state.wantToReadBooks}  moveBookFunction={this.updateBookShelf}/>
+                <Shelf shelfName="Read" shelfBooks={this.state.readBooks}  moveBookFunction={this.updateBookShelf}/>                  
               </div>
             </div>
             <div className="open-search">
