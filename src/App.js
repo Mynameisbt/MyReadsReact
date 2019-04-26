@@ -2,6 +2,7 @@ import React from 'react'
  import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Shelf from './Shelf';
+import BookSearch from './BookSearch';
 
 class BooksApp extends React.Component {
   state = {
@@ -14,7 +15,8 @@ class BooksApp extends React.Component {
     showSearchPage: false,
     currentlyReadingBooks: [],
     wantToReadBooks: [],
-    readBooks: []
+    readBooks: [],
+    searchResults: []
   }
 
   getAllBooks =() => {
@@ -30,9 +32,24 @@ class BooksApp extends React.Component {
     })
   }
 
-  search = () => {
-    BooksAPI.search(document.getElementById("termSearch").value).then((result) => {
+  search = (searchTerm) => {
+    console.log("Searching " + searchTerm);
+    BooksAPI.search(searchTerm).then((result) => {
       console.log(result);
+      if (result instanceof Array) {
+        this.setState((prevState) => (
+          {
+            searchResults: result
+          }
+        ));
+      } else {
+        this.setState((prevState) => (
+          {
+            searchResults: []
+          }
+        ));
+      }
+        
     });
   }
 
@@ -57,34 +74,13 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
+          <BookSearch searchFunction={this.search} searchResults={this.state.searchResults} moveBookFunction={this.updateBookShelf}/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
             <button onClick={() => this.getAllBooks()}>Get ALL</button>
-            <input id="termSearch" type="text"></input>
-            <button onClick={() => this.search()}>Search</button>
             <div className="list-books-content">
               <div>
                 <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks} moveBookFunction={this.updateBookShelf}/>
