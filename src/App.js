@@ -37,6 +37,16 @@ class BooksApp extends React.Component {
     BooksAPI.search(searchTerm).then((result) => {
       console.log(result);
       if (result instanceof Array) {
+        result.map((currentBook) => {
+          if (this.state.currentlyReadingBooks.filter((book) => (book.id === currentBook.id)).length > 0) {
+            currentBook.shelf = "currentlyReading";
+          } else if (this.state.wantToReadBooks.filter((book) => (book.id === currentBook.id)).length > 0) {
+            currentBook.shelf = "wantToRead";
+          } else if (this.state.readBooks.filter((book) => (book.id === currentBook.id)).length > 0) {
+            currentBook.shelf = "read";
+          }
+          return null;
+        });
         this.setState((prevState) => (
           {
             searchResults: result
