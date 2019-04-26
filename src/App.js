@@ -30,6 +30,12 @@ class BooksApp extends React.Component {
     })
   }
 
+  search = () => {
+    BooksAPI.search(document.getElementById("termSearch").value).then((result) => {
+      console.log(result);
+    });
+  }
+
 
 
   updateBookShelf = (book, newShelf) => {
@@ -77,6 +83,8 @@ class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
             <button onClick={() => this.getAllBooks()}>Get ALL</button>
+            <input id="termSearch" type="text"></input>
+            <button onClick={() => this.search()}>Search</button>
             <div className="list-books-content">
               <div>
                 <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks} moveBookFunction={this.updateBookShelf}/>
