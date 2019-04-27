@@ -3,6 +3,8 @@ import React from 'react'
 import './App.css'
 import Shelf from './Shelf';
 import BookSearch from './BookSearch';
+import { Link } from 'react-router-dom';
+import { Route } from 'react-router';
 
 class BooksApp extends React.Component {
   state = {
@@ -93,25 +95,27 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <BookSearch searchFunction={this.search} searchResults={this.state.searchResults} moveBookFunction={this.updateBookShelf}/>
-        ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks} moveBookFunction={this.updateBookShelf}/>
-                <Shelf shelfName="Want To Read" shelfBooks={this.state.wantToReadBooks}  moveBookFunction={this.updateBookShelf}/>
-                <Shelf shelfName="Read" shelfBooks={this.state.readBooks}  moveBookFunction={this.updateBookShelf}/>                  
+        <Route exact path="/" render= { () => (
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>MyReads</h1>
               </div>
+              <div className="list-books-content">
+                <div>
+                  <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks} moveBookFunction={this.updateBookShelf}/>
+                  <Shelf shelfName="Want To Read" shelfBooks={this.state.wantToReadBooks}  moveBookFunction={this.updateBookShelf}/>
+                  <Shelf shelfName="Read" shelfBooks={this.state.readBooks}  moveBookFunction={this.updateBookShelf}/>                  
+                </div>
+              </div>
+              <Link className="open-search" to="/search">
+                <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+              </Link>
             </div>
-            <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
-            </div>
-          </div>
-        )}
+          )
+        }  />
+        <Route path="/search" render={ () => (
+            <BookSearch searchFunction={this.search} searchResults={this.state.searchResults} moveBookFunction={this.updateBookShelf}/>
+          )} />
       </div>
     )
   }
