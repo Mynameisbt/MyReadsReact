@@ -1,6 +1,5 @@
 import React from 'react'
 import Book from './Book.js'
-import './App.css'
 
 class Shelf extends React.Component {
 
@@ -12,8 +11,8 @@ class Shelf extends React.Component {
                     <ol className="books-grid">
                     {
                         this.props.shelfBooks.map((book) => {
-                            return (<li>
-                                <Book book={book}  moveBookFunction={this.props.moveBookFunction}/>
+                            return (<li key={book.id}>
+                                <Book  book={book}  moveBookFunction={this.props.moveBookFunction}/>
                             </li>)
                         })
                     }
