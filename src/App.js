@@ -19,7 +19,7 @@ class BooksApp extends React.Component {
     searchResults: []
   }
 
-  getAllBooks =() => {
+  componentDidMount () {
     BooksAPI.getAll().then( (result) => {
       console.log(result);
       this.setState((prevState) => (
@@ -100,7 +100,6 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-            <button onClick={() => this.getAllBooks()}>Get ALL</button>
             <div className="list-books-content">
               <div>
                 <Shelf shelfName="Currently Reading" shelfBooks={this.state.currentlyReadingBooks} moveBookFunction={this.updateBookShelf}/>
