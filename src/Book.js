@@ -1,5 +1,7 @@
 import React from 'react'
 import './App.css'
+import logo from './icons/icons8-help.svg'; 
+
 
 class Book extends React.Component {
     updateShelf = (book, newValue) => {
@@ -7,10 +9,18 @@ class Book extends React.Component {
     }
 
     render() {
+        let bookCover = null;
+        if (this.props.book.imageLinks) {
+            bookCover = <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${this.props.book.imageLinks.thumbnail}`}}></div>
+        } else {
+            bookCover =  <img className="book-cover" src={logo} style={{ width: 128, height: 193}} alt="No thumbnail available"/>
+        }
         return (
         <div className="book">
             <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${this.props.book.imageLinks.thumbnail}")` }}></div>
+                {
+                    bookCover
+                }
                 <div className="book-shelf-changer">
                 <select defaultValue={this.props.book.shelf? this.props.book.shelf: 'none'} onChange={(event) => (this.updateShelf(this.props.book, event.target.value)) }>
                     <option value="move" disabled>Move to...</option>
