@@ -13,7 +13,7 @@ class Book extends React.Component {
         if (this.props.book.imageLinks) {
             bookCover = <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${this.props.book.imageLinks.thumbnail}`}}></div>
         } else {
-            bookCover =  <img className="book-cover" src={logo} style={{ width: 128, height: 193}} alt="No thumbnail available"/>
+            bookCover =  <div className="book-cover"><img src={logo} style={{ width: 128, height: 163}} alt="No thumbnail available"/><a href="https://icons8.com/icons">by Icons8</a></div>
         }
         return (
         <div className="book">
